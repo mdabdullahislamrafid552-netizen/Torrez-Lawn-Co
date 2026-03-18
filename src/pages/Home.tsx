@@ -20,7 +20,7 @@ export default function Home() {
           <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-ink/90 to-transparent" />
         </div>
 
-        <div className="max-w-7xl mx-auto relative z-10 w-full mt-12 md:mt-0">
+        <div className="max-w-7xl mx-auto relative z-10 w-full mt-12 md:mt-0 flex flex-col lg:flex-row items-start lg:items-end justify-between gap-12">
           <motion.div 
             initial="hidden"
             animate="visible"
@@ -92,25 +92,25 @@ export default function Home() {
               <div className="flex items-center"><Clock className="w-5 h-5 text-primary mr-2" /> Reliable Service</div>
             </motion.div>
           </motion.div>
-        </div>
 
-        {/* Floating Badge */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute bottom-8 right-8 lg:bottom-16 lg:right-16 bg-white/10 backdrop-blur-2xl p-7 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] border border-white/20 hidden md:block z-10"
-        >
-          <div className="flex items-center gap-6">
-            <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center border border-primary/30">
-              <CheckCircle2 className="w-8 h-8 text-primary" />
+          {/* Floating Badge */}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="bg-white/10 backdrop-blur-2xl p-7 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] border border-white/20 hidden md:block shrink-0 mb-4 lg:mb-12"
+          >
+            <div className="flex items-center gap-6">
+              <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center border border-primary/30">
+                <CheckCircle2 className="w-8 h-8 text-primary" />
+              </div>
+              <div>
+                <p className="font-serif font-medium text-white text-3xl drop-shadow-md tracking-tight">10+ Years</p>
+                <p className="text-xs text-white/80 font-medium uppercase tracking-[0.2em] drop-shadow-md mt-1">Of Excellence</p>
+              </div>
             </div>
-            <div>
-              <p className="font-serif font-medium text-white text-3xl drop-shadow-md tracking-tight">10+ Years</p>
-              <p className="text-xs text-white/80 font-medium uppercase tracking-[0.2em] drop-shadow-md mt-1">Of Excellence</p>
-            </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </section>
 
       {/* Services Overview */}
