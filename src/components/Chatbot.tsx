@@ -3,7 +3,16 @@ import { motion, AnimatePresence } from 'motion/react';
 import { MessageCircle, X, Send, Loader2, Bot } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+// Initialize AI safely to prevent app crash if API key is missing
+let ai: GoogleGenAI | null = null;
+try {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (apiKey && apiKey !== 'undefined') {
+    ai = new GoogleGenAI({ apiKey });
+  }
+} catch (error) {
+  console.error("Failed to initialize GoogleGenAI:", error);
+}
 
 type Message = {
   id: string;
@@ -22,12 +31,17 @@ export default function Chatbot() {
   const chatRef = useRef<any>(null);
 
   useEffect(() => {
-    chatRef.current = ai.chats.create({
-      model: 'gemini-3-flash-preview',
-      config: {
-        systemInstruction: "You are a helpful customer service AI for Torrez Lawn Care Services, a premium lawn care and landscaping business in Hammond, LA. You answer questions about lawn maintenance, landscaping, pressure washing, property builds, mulch, and pine straw. Keep answers concise, friendly, and professional. Encourage users to get a free quote or call (985) 662-4350.",
-      }
-    });
+    if (!ai) return;
+    try {
+      chatRef.current = ai.chats.create({
+        model: 'gemini-3-flash-preview',
+        config: {
+          systemInstruction: "You are a helpful customer service AI for Torrez Lawn Care Services, a premium lawn care and landscaping business in Hammond, LA. You answer questions about lawn maintenance, landscaping, pressure washing, property builds, mulch, and pine straw. Keep answers concise, friendly, and professional. Encourage users to get a free quote or call (985) 662-4350.",
+        }
+      });
+    } catch (e) {
+      console.error("Failed to create chat:", e);
+    }
   }, []);
 
   const scrollToBottom = () => {
@@ -46,6 +60,12 @@ export default function Chatbot() {
     setMessages(prev => [...prev, userMsg]);
     setInput('');
     setIsLoading(true);
+
+    if (!chatRef.current) {
+      setMessages(prev => [...prev, { id: (Date.now() + 1).toString(), role: 'model', text: "Sorry, I'm currently unavailable. Please call us at (985) 662-4350." }]);
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const response = await chatRef.current.sendMessage({ message: userMsg.text });
